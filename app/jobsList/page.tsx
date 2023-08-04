@@ -23,7 +23,7 @@ const jobs = [
     }
 ]
 
-export default function Home() {
+export default function JobsList() {
     const jobsList = jobs.map((job =>
         <Grid item xs={8}>
             <Card sx={{ maxWidth: 345 }}>
