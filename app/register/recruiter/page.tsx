@@ -1,24 +1,11 @@
 'use client'
-// import Autocomplete from "@mui/material/Autocomplete";
-// import Button from "@mui/material/Button";
-// import Stack from "@mui/material/Stack";
-// import TextField from "@mui/material/TextField";
-// import SendIcon from '@mui/icons-material/Send';
 
 import Form from '@rjsf/mui';
 import { RJSFSchema } from '@rjsf/utils';
-import validator from '@rjsf/validator-ajv6';
+import validator from '@rjsf/validator-ajv8';
 
 const schema: RJSFSchema = {
-    "$schema": "http://json-schema.org/draft-04/schema#",
-    "additionalProperties": false,
-    "definitions": {
-        "iso8601": {
-            "type": "string",
-            "description": "Similar to the standard date type, but each section after the year is optional. e.g. 2014-06-29 or 2023-04",
-            "pattern": "^([1-2][0-9]{3}-[0-1][0-9]-[0-3][0-9]|[1-2][0-9]{3}-[0-1][0-9]|[1-2][0-9]{3})$"
-        }
-    },
+
     "properties": {
         "Job Info": {
             "type": "object",
@@ -78,11 +65,11 @@ const schema: RJSFSchema = {
     "title": "Job Schema",
     "type": "object"
 }
-export default function Recruiter() {
 
+export default function Recruiter() {
     return (
         <div>
-            <Form schema={schema} validator={validator} />
+            <Form schema={schema} validator={validator} onSubmit={({ formData }) => fetch('/api/recruiter', { method: 'POST', body: JSON.stringify(formData), headers: { 'content-type': 'application/json' } })} />
         </div>
     )
 }

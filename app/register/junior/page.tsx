@@ -2,11 +2,10 @@
 
 import Form from '@rjsf/mui';
 import { RJSFSchema } from '@rjsf/utils';
-import validator from '@rjsf/validator-ajv6';
+import validator from '@rjsf/validator-ajv8';
 
 const schema: RJSFSchema = {
-    "$schema": "http://json-schema.org/draft-04/schema#",
-    "additionalProperties": false,
+
     "definitions": {
         "iso8601": {
             "type": "string",
@@ -373,6 +372,8 @@ const schema: RJSFSchema = {
 
 export default function Junior() {
     return (
-        <Form schema={schema} validator={validator} />
+        <div>
+            <Form schema={schema} validator={validator} onSubmit={({ formData }) => fetch('/api/junior', { method: 'POST', body: JSON.stringify(formData), headers: { 'content-type': 'application/json' } })} />
+        </div>
     )
 }
