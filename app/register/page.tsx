@@ -2,7 +2,9 @@ import { Button, Link } from "@mui/material";
 import SendIcon from '@mui/icons-material/Send';
 
 
+
 export default function Register() {
+
     return (
         <main>
             <h3>I am a:</h3>
@@ -17,6 +19,7 @@ export default function Register() {
                     Go to jobs list
                 </Button>
             </Link>
+
         </main>
     )
 }

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { savetodb } from "../db";
+import { saveUser } from "../db";
 
 export async function GET(request: Request) {
   return new Response("Hello, Next.js!", {
@@ -14,6 +14,6 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   const res = await request.json();
-  savetodb(res);
+  saveUser(res);
   return NextResponse.json({ success: true });
 }

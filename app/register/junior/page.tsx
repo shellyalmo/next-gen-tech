@@ -370,6 +370,7 @@ const schema: RJSFSchema = {
     "type": "object"
 }
 
+
 export default function Junior() {
     return (
         <div>
