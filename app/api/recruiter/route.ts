@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { saveUser } from "../db";
+import { saveUserRecruiter } from "../db";
+import { auth } from "@clerk/nextjs";
 
 export async function GET(request: Request) {
   return new Response("Hello, Next.js!", {
@@ -13,7 +14,14 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  const res = await request.json();
-  saveUser(res);
-  return NextResponse.json({ success: true });
+  const resume = await request.json();
+  const { userId } = auth();
+
+  if (userId !== null) {
+    saveUserRecruiter(userId, "recruiter", resume);
+    //save resume to table
+    return NextResponse.json({ success: true });
+  } else {
+    return NextResponse.json({ success: false });
+  }
 }

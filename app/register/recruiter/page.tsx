@@ -72,5 +72,10 @@ export default function Recruiter() {
             <Form schema={schema} validator={validator} onSubmit={({ formData }) => fetch('/api/recruiter', { method: 'POST', body: JSON.stringify(formData), headers: { 'content-type': 'application/json' } })} />
         </div>
     )
+
+
+
+
+
 }
 
