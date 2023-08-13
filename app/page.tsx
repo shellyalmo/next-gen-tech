@@ -1,12 +1,24 @@
-import { SignIn } from "@clerk/nextjs";
-import { UserButton } from "@clerk/nextjs";
+import { UserButton, auth } from "@clerk/nextjs";
+import { Button, Link } from "@mui/material";
 
 export default function Home() {
+  const { userId } = auth();
+
   return (
     <main className="flex min-h-screen flex-col items-center p-24">
-      <h1>Welcome to jobs boards for juniors</h1>
-      <SignIn redirectUrl="register" />
+      <h1>Welcome to jobs board for juniors</h1>
+      {userId === null && (
+        <div className="flex flex-row">
+          <Link href="sign-in" underline="none">
+            <Button variant="contained">Signin</Button>
+          </Link>
+          <Link href="sign-up" underline="none">
+            <Button variant="contained">Signup</Button>
+          </Link>
+        </div>
+      )}
+
       <UserButton afterSignOutUrl="/" />
     </main>
-  )
+  );
 }
