@@ -1,33 +1,11 @@
 import { Card, CardContent, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid';
-import { randomUUID } from 'crypto';
+import { readJobs } from '../api/db';
 
-const jobs = [
-    {
-        'id': randomUUID(),
-        'job title': 'junior frontend',
-        'location': 'Tel Aviv',
-        'job description': 'We are seeking a passionate and motivated Junior Frontend Developer to join our team. As a Junior Frontend Developer, you will collaborate with our experienced developers to design and implement user interfaces for web applications. Your responsibilities will include writing clean and efficient HTML, CSS, and JavaScript code, assisting in debugging and testing, and staying up-to-date with the latest frontend trends and technologies. This is an excellent opportunity for a talented individual looking to grow their skills and contribute to exciting projects in a supportive and dynamic environment.',
 
-    },
-    {
-        'id': randomUUID(),
-        'job title': 'junior backend',
-        'location': 'Tel Aviv',
-        'job description': 'We are seeking a passionate and motivated Junior backend Developer to join our team. As a Junior backend Developer, you will collaborate with our experienced developers to design and implement user interfaces for web applications. Your responsibilities will include writing clean and efficient HTML, CSS, and JavaScript code, assisting in debugging and testing, and staying up-to-date with the latest backend trends and technologies. This is an excellent opportunity for a talented individual looking to grow their skills and contribute to exciting projects in a supportive and dynamic environment.',
-
-    },
-    {
-        'id': randomUUID(),
-        'job title': 'junior fullstack',
-        'location': 'Tel Aviv',
-        'job description': 'We are seeking a passionate and motivated Junior fullstack Developer to join our team. As a Junior fullstack Developer, you will collaborate with our experienced developers to design and implement user interfaces for web applications. Your responsibilities will include writing clean and efficient HTML, CSS, and JavaScript code, assisting in debugging and testing, and staying up-to-date with the latest fullstack trends and technologies. This is an excellent opportunity for a talented individual looking to grow their skills and contribute to exciting projects in a supportive and dynamic environment.',
-
-    }
-]
-
-export default function JobsList() {
-    const jobsList = jobs.map((job =>
+export default async function JobsList() {
+    const jobs = await readJobs()
+    const jobsList = jobs.rows.map((job =>
         <Grid item xs={8} key={job.id}>
             <Card sx={{ maxWidth: 345 }}>
                 <CardContent>
@@ -35,19 +13,19 @@ export default function JobsList() {
                         Job Title:
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                        {job["job title"]}
+                        {job["job"]["Job Info"]["title"]}
                     </Typography>
                     <Typography gutterBottom variant="h5" component="div">
-                        Job Location:
+                        Company:
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                        {job["location"]}
+                        {job["job"]["Job Info"]["company"]}
                     </Typography>
                     <Typography gutterBottom variant="h5" component="div">
-                        Job Description:
+                        Location:
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                        {job["job description"]}
+                        {job["job"]["Job Info"]["location"]}
                     </Typography>
                 </CardContent>
             </Card></Grid>

@@ -24,3 +24,7 @@ export async function saveUserRecruiter(
 }
 // SELECT job->'skills'->0->>'name' FROM jobs;
 // SELECT job->'Job Info'->'title' FROM jobs;
+
+export async function readJobs() {
+  return await sql`SELECT * from jobs;`;
+}
