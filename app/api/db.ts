@@ -28,3 +28,4 @@ export async function saveUserRecruiter(
 export async function readJobs() {
   return await sql`SELECT * from jobs;`;
 }
+//add one job read
