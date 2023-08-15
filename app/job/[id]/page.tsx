@@ -1,4 +1,9 @@
-export default function Job({ params }: { params: { id: string } }) {
-    return <div>Job Details: {params.id}</div>
-    //add all the details of the job
+import { readJob } from "@/app/api/db"
+import JobCard from "@/app/jobslist/JobCard"
+
+export default async function Job({ params }: { params: { id: string } }) {
+    const jobDetails = await readJob(params.id)
+    return <div>Job Details:
+        <JobCard job={jobDetails.rows[0]} showFullJob={true} />
+    </div>
 }

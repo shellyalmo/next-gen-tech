@@ -1,7 +1,6 @@
-import { Card, CardContent, Typography, CardActions, Button, Link } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import { readJobs } from '../api/db';
-
+import JobCard from './JobCard';
 
 export default async function JobsList() {
     const jobs = await readJobs()
@@ -10,37 +9,12 @@ export default async function JobsList() {
             <h1>List of all jobs</h1>
             <Grid container spacing={8}>
                 {jobs.rows.map((job =>
-                    <Grid item xs={8} key={job.id}>
-                        <Card sx={{ maxWidth: 345 }}>
-                            <CardContent>
-                                <Typography gutterBottom variant="h5" component="div">
-                                    Job Title:
-                                </Typography>
-                                <Typography variant="body2" color="text.secondary">
-                                    {job["job"]["Job Info"]["title"]}
-                                </Typography>
-                                <Typography gutterBottom variant="h5" component="div">
-                                    Company:
-                                </Typography>
-                                <Typography variant="body2" color="text.secondary">
-                                    {job["job"]["Job Info"]["company"]}
-                                </Typography>
-                                <Typography gutterBottom variant="h5" component="div">
-                                    Location:
-                                </Typography>
-                                <Typography variant="body2" color="text.secondary">
-                                    {job["job"]["Job Info"]["location"]}
-                                </Typography>
-                            </CardContent>
-                            <CardActions>
-                                <Link href={`job/${job.job_id}`} underline="none">
-                                    <Button variant="contained">Job Details</Button>
-                                </Link>
-                            </CardActions>
-                        </Card></Grid>
+                    <JobCard job={job} key={job.jobId} showFullJob={false} />
                 )
                 )}
             </Grid>
         </main>
     )
 }
+
+
