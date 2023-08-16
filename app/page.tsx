@@ -29,7 +29,7 @@ export default async function Home() {
         <Link href="jobslist" underline="none">
           <Button variant="contained">go to all jobs</Button>
         </Link>
-        <Link href="junior" underline="none">
+        <Link href="register/junior" underline="none">
           <Button variant="contained">Upload resume</Button>
         </Link>
       </div>}
