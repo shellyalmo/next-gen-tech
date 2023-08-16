@@ -30,6 +30,13 @@ export async function readJobs() {
 }
 
 //add one job read
-export async function readJob(jobId:string) {
+export async function readJob(jobId: string) {
   return await sql`SELECT * from jobs where job_id=${jobId};`;
+}
+
+//check user type by user id
+export async function readUserType(userId: string) {
+  const queryResult =
+    await sql`SELECT user_type from users where user_id=${userId};`;
+  return queryResult.rows[0].user_type;
 }
