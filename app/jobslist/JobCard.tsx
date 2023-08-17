@@ -1,10 +1,10 @@
 "use client"
 
-import { Card, CardContent, Typography, CardActions, Button, Link } from '@mui/material';
+import { Card, CardContent, Typography, CardActions, Button, Link, Chip, List, ListItem, ListItemText } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import { IJobSchema } from '../api/interfaces';
 
-export default function JobCard({ job, showFullJob }: { job: IJobSchema, showFullJob: boolean }) {
+export default function JobCard({ job, showFullJob, jobId }: { job: IJobSchema, showFullJob: boolean, jobId: string }) {
     const skills = job["skills"]
     return <Grid item xs={8}>
         <Card sx={{ maxWidth: 345 }}>
@@ -41,12 +41,15 @@ export default function JobCard({ job, showFullJob }: { job: IJobSchema, showFul
                 </>}
                 {showFullJob && <><Typography gutterBottom variant="h5" component="div">
                     Skills:
-                </Typography><Typography variant="body2" color="text.secondary">
-                        {skills?.map((skill) => skill.name)}
-                    </Typography></>}
+                </Typography><List>
+                        {skills?.map((skill) => <ListItem key={skill.name}>
+                            <ListItemText primary={skill.name} />
+                            {skill.keywords?.map(keyWord => <Chip label={keyWord} key={keyWord} variant="outlined" />)}
+                        </ListItem>)}
+                    </List></>}
             </CardContent>
             <CardActions>
-                {!showFullJob && <Link href={`job/${job.job_id}`} underline="none">
+                {!showFullJob && <Link href={`job/${jobId}`} underline="none">
                     <Button variant="contained">Job Details</Button>
                 </Link>}
             </CardActions>

@@ -13,13 +13,11 @@ export async function saveUserJunior(
 }
 // select resume->'work'->'0'->'name' from juniors;
 
-export async function saveUserRecruiter(
-  userId: string,
-  userType: string,
-  job: any
-) {
+export async function saveUserRecruiter(userId: string, userType: string) {
   await sql`INSERT INTO users (user_id,user_type)
     VALUES(${userId},${userType});`;
+}
+export async function saveNewJob(userId: string, job: any) {
   await sql`INSERT INTO jobs (recruiter_id,job)
     VALUES(${userId},${job});`;
 }

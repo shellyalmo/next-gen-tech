@@ -9,7 +9,7 @@ export default async function JobsList() {
             <h1>List of all jobs</h1>
             <Grid container spacing={8}>
                 {jobsQueryResults.rows.map((row =>
-                    <JobCard job={row.job} key={row.job_id} showFullJob={false} />
+                    <JobCard job={row.job} key={row.job_id} jobId={row.job_id} showFullJob={false} />
                 )
                 )}
             </Grid>
