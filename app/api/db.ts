@@ -1,4 +1,5 @@
 import { sql } from "@vercel/postgres";
+import { IJobSchema } from "./interfaces";
 
 export async function saveUserJunior(
   userId: string,
@@ -26,17 +27,26 @@ export async function saveUserRecruiter(
 // SELECT job->'Job Info'->'title' FROM jobs;
 
 export async function readJobs() {
-  return await sql`SELECT * from jobs;`;
+  return await sql<{
+    job: IJobSchema;
+    recruiter_id: string;
+    job_id: string;
+  }>`SELECT * from jobs;`;
 }
 
 //add one job read
 export async function readJob(jobId: string) {
-  return await sql`SELECT * from jobs where job_id=${jobId};`;
+  return await sql<{
+    job: IJobSchema;
+    recruiter_id: string;
+    job_id: string;
+  }>`SELECT * from jobs where job_id=${jobId};`;
 }
 
 //check user type by user id
 export async function readUserType(userId: string) {
-  const queryResult =
-    await sql`SELECT user_type from users where user_id=${userId};`;
+  const queryResult = await sql<{
+    user_type: "junior" | "recruiter";
+  }>`SELECT user_type from users where user_id=${userId};`;
   return queryResult.rows[0].user_type;
 }

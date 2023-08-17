@@ -5,7 +5,7 @@ import { RJSFSchema } from '@rjsf/utils';
 import validator from '@rjsf/validator-ajv8';
 
 const schema: RJSFSchema = {
-
+    "required": ["Job Info"],
     "properties": {
         "Job Info": {
             "type": "object",
