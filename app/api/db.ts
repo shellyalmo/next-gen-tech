@@ -47,3 +47,10 @@ export async function readUserType(userId: string) {
   }>`SELECT user_type from users where user_id=${userId};`;
   return queryResult.rows[0].user_type;
 }
+
+export async function addApplicantToJob(userId: string, jobId: string) {
+  await sql`UPDATE jobs
+  SET applicants = ARRAY_APPEND(applicants, ${userId})
+  WHERE job_id = ${jobId};  
+  `;
+}
