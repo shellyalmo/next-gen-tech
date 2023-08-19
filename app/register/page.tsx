@@ -1,25 +1,27 @@
-import { Button, Link } from "@mui/material";
-import SendIcon from '@mui/icons-material/Send';
+'use client'
 
+import { Button } from "@mui/material";
+import { redirect } from 'next/navigation'
 
 
 export default function Register() {
+    const goToJunior = () => {
+        fetch('/api/junior', { method: 'POST' })
 
+        redirect('/dashboard')
+    }
+    const goToRecruiter = () => {
+        fetch('/api/recruiter', { method: 'POST' })
+
+        redirect('/dashboard')
+
+
+    }
     return (
         <main>
             <h3>I am a:</h3>
-            <Link href="/register/recruiter" underline="none">
-                <Button variant="contained">Recruiter</Button>
-            </Link>
-            <Link href="/register/junior" underline="none">
-                <Button variant="contained">Junior</Button>
-            </Link>
-            <Link href="jobslist" underline="none">
-                <Button variant="contained" endIcon={<SendIcon />} >
-                    Go to jobs list
-                </Button>
-            </Link>
-
+            <Button variant="contained" onClick={goToRecruiter}>Recruiter</Button>
+            <Button variant="contained" onClick={goToJunior}>Junior</Button>
         </main>
     )
 }

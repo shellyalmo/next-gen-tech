@@ -1,13 +1,14 @@
 import { NextResponse } from "next/server";
+import { saveNewJob } from "../db";
 import { auth } from "@clerk/nextjs";
 
-import { saveUserJunior } from "../db";
-
 export async function POST(request: Request) {
+  const job = await request.json();
   const { userId } = auth();
 
   if (userId !== null) {
-    saveUserJunior(userId, "junior");
+    saveNewJob(userId, job);
+    //save job to table
     return NextResponse.json({ success: true });
   } else {
     return NextResponse.json({ success: false });

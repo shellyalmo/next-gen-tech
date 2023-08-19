@@ -1,13 +1,12 @@
 import { sql } from "@vercel/postgres";
 import { IJobSchema } from "./interfaces";
 
-export async function saveUserJunior(
-  userId: string,
-  userType: string,
-  resume: any
-) {
+export async function saveUserJunior(userId: string, userType: string) {
   await sql`INSERT INTO users (user_id,user_type)
   VALUES(${userId},${userType});`;
+}
+
+export async function saveNewResume(userId: string, resume: any) {
   await sql`INSERT INTO juniors (junior_id,resume)
   VALUES(${userId},${resume});`;
 }

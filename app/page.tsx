@@ -1,13 +1,12 @@
 import { UserButton, auth } from "@clerk/nextjs";
 import { Button, Link } from "@mui/material";
-import { readUserType } from "./api/db";
+import { redirect } from "next/navigation";
+
 
 export default async function Home() {
   const { userId } = auth();
-  // better to do a new component with userType
-  let userType = null
-  if (userId) {
-    userType = await readUserType(userId)
+  if (userId !== null) {
+    redirect('/dashboard')
   }
 
   return (
@@ -25,22 +24,7 @@ export default async function Home() {
       )}
 
       <UserButton afterSignOutUrl="/" />
-      {userType === "junior" && <div className="flex flex-row">
-        <Link href="jobslist" underline="none">
-          <Button variant="contained">go to all jobs</Button>
-        </Link>
-        <Link href="register/junior" underline="none">
-          <Button variant="contained">Upload resume</Button>
-        </Link>
-      </div>}
-      {userType === "recruiter" && <div className="flex flex-row">
-        <Link href="jobslist" underline="none">
-          <Button variant="contained">go to all jobs</Button>
-        </Link>
-        <Link href="register/recruiter" underline="none">
-          <Button variant="contained">Upload job</Button>
-        </Link>
-      </div>}
+
     </main>
   );
 }

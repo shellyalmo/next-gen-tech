@@ -69,7 +69,7 @@ const schema: RJSFSchema = {
 export default function Recruiter() {
     return (
         <div>
-            <Form schema={schema} validator={validator} onSubmit={({ formData }) => fetch('/api/recruiter', { method: 'POST', body: JSON.stringify(formData), headers: { 'content-type': 'application/json' } })} />
+            <Form schema={schema} validator={validator} onSubmit={({ formData }) => fetch('/api/job', { method: 'POST', body: JSON.stringify(formData), headers: { 'content-type': 'application/json' } })} />
         </div>
     )
 

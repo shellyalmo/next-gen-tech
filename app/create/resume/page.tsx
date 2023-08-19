@@ -374,7 +374,7 @@ const schema: RJSFSchema = {
 export default function Junior() {
     return (
         <div>
-            <Form schema={schema} validator={validator} onSubmit={({ formData }) => fetch('/api/junior', { method: 'POST', body: JSON.stringify(formData), headers: { 'content-type': 'application/json' } })} />
+            <Form schema={schema} validator={validator} onSubmit={({ formData }) => fetch('/api/resume', { method: 'POST', body: JSON.stringify(formData), headers: { 'content-type': 'application/json' } })} />
         </div>
     )
 }
