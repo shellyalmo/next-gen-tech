@@ -15,12 +15,10 @@ export default async function Job({ params }: { params: { id: string } }) {
     }
 
 
-    const applyToJob = fetchApply(params)
-
     return <div>Job Details:
         <JobCard job={jobDetails.rows[0].job} showFullJob={true} />
         {userType === "junior" && <div className="flex flex-row">
-            <Button variant="contained" onClick={applyToJob}>Apply to job</Button>
+            <Button variant="contained" onClick={fetchApply}>Apply to job</Button>
         </div>}
     </div>
 }
