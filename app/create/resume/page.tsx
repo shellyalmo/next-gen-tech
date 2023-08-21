@@ -1,8 +1,13 @@
 'use client'
 
+import { readResume } from '@/app/api/db';
+import { auth } from '@clerk/nextjs';
+import { Button } from '@mui/material';
 import Form from '@rjsf/mui';
 import { RJSFSchema } from '@rjsf/utils';
 import validator from '@rjsf/validator-ajv8';
+import { redirect } from 'next/navigation';
+import { useEffect } from 'react';
 
 const schema: RJSFSchema = {
 
@@ -25,23 +30,9 @@ const schema: RJSFSchema = {
                     "type": "string",
                     "description": "e.g. Web Developer"
                 },
-                "email": {
-                    "type": "string",
-                    "description": "e.g. thomas@gmail.com",
-                    "format": "email"
-                },
                 "phone": {
                     "type": "string",
                     "description": "Phone numbers are stored as strings so use any format you like, e.g. 712-117-2923"
-                },
-                "url": {
-                    "type": "string",
-                    "description": "URL (as per RFC 3986) to your website, e.g. personal homepage",
-                    "format": "uri"
-                },
-                "summary": {
-                    "type": "string",
-                    "description": "Write a short 2-3 sentence biography about yourself"
                 },
                 "profiles": {
                     "type": "array",
@@ -53,7 +44,7 @@ const schema: RJSFSchema = {
                         "properties": {
                             "network": {
                                 "type": "string",
-                                "description": "e.g. Facebook or Twitter"
+                                "description": "e.g. Github"
                             },
                             "username": {
                                 "type": "string",
@@ -61,7 +52,7 @@ const schema: RJSFSchema = {
                             },
                             "url": {
                                 "type": "string",
-                                "description": "e.g. http://twitter.example.com/neutralthoughts",
+                                "description": "e.g. http://github.example.com/neutralthoughts",
                                 "format": "uri"
                             }
                         }
@@ -80,22 +71,9 @@ const schema: RJSFSchema = {
                         "type": "string",
                         "description": "e.g. Facebook"
                     },
-                    "location": {
-                        "type": "string",
-                        "description": "e.g. Menlo Park, CA"
-                    },
-                    "description": {
-                        "type": "string",
-                        "description": "e.g. Social Media Company"
-                    },
                     "position": {
                         "type": "string",
                         "description": "e.g. Software Engineer"
-                    },
-                    "url": {
-                        "type": "string",
-                        "description": "e.g. http://facebook.example.com",
-                        "format": "uri"
                     },
                     "startDate": {
                         "$ref": "#/definitions/iso8601"
@@ -129,11 +107,6 @@ const schema: RJSFSchema = {
                     "institution": {
                         "type": "string",
                         "description": "e.g. Massachusetts Institute of Technology"
-                    },
-                    "url": {
-                        "type": "string",
-                        "description": "e.g. http://facebook.example.com",
-                        "format": "uri"
                     },
                     "area": {
                         "type": "string",
@@ -177,10 +150,6 @@ const schema: RJSFSchema = {
                         "type": "string",
                         "description": "e.g. Web Development"
                     },
-                    "level": {
-                        "type": "string",
-                        "description": "e.g. Master"
-                    },
                     "keywords": {
                         "type": "array",
                         "description": "List some keywords pertaining to this skill",
@@ -203,11 +172,11 @@ const schema: RJSFSchema = {
                 "properties": {
                     "name": {
                         "type": "string",
-                        "description": "e.g. The World Wide Web"
+                        "description": "e.g. Twitter App Clone"
                     },
                     "description": {
                         "type": "string",
-                        "description": "Short summary of project. e.g. Collated works of 2017."
+                        "description": "Frontend and Backend for Twitter"
                     },
                     "highlights": {
                         "type": "array",
@@ -215,7 +184,7 @@ const schema: RJSFSchema = {
                         "additionalItems": false,
                         "items": {
                             "type": "string",
-                            "description": "e.g. Directs you close but not quite there"
+                            "description": "e.g. has algorithmic feed"
                         }
                     },
                     "keywords": {
@@ -227,33 +196,10 @@ const schema: RJSFSchema = {
                             "description": "e.g. AngularJS"
                         }
                     },
-                    "startDate": {
-                        "$ref": "#/definitions/iso8601"
-                    },
-                    "endDate": {
-                        "$ref": "#/definitions/iso8601"
-                    },
                     "url": {
                         "type": "string",
                         "format": "uri",
-                        "description": "e.g. http://www.computer.org/csdl/mags/co/1996/10/rx069-abs.html"
-                    },
-                    "roles": {
-                        "type": "array",
-                        "description": "Specify your role on this project or in company",
-                        "additionalItems": false,
-                        "items": {
-                            "type": "string",
-                            "description": "e.g. Team Lead, Speaker, Writer"
-                        }
-                    },
-                    "entity": {
-                        "type": "string",
-                        "description": "Specify the relevant company/entity affiliations e.g. 'greenpeace', 'corporationXYZ'"
-                    },
-                    "type": {
-                        "type": "string",
-                        "description": " e.g. 'volunteering', 'presentation', 'talk', 'application', 'conference'"
+                        "description": "e.g. http://www.mytwitter.com"
                     }
                 }
             }
@@ -267,16 +213,11 @@ const schema: RJSFSchema = {
                 "properties": {
                     "organization": {
                         "type": "string",
-                        "description": "e.g. Facebook"
+                        "description": "e.g. shecodes"
                     },
                     "position": {
                         "type": "string",
-                        "description": "e.g. Software Engineer"
-                    },
-                    "url": {
-                        "type": "string",
-                        "description": "e.g. http://facebook.example.com",
-                        "format": "uri"
+                        "description": "e.g. branch manager"
                     },
                     "startDate": {
                         "$ref": "#/definitions/iso8601"
@@ -284,83 +225,14 @@ const schema: RJSFSchema = {
                     "endDate": {
                         "$ref": "#/definitions/iso8601"
                     },
-                    "summary": {
-                        "type": "string",
-                        "description": "Give an overview of your responsibilities at the company"
-                    },
                     "highlights": {
                         "type": "array",
                         "description": "Specify accomplishments and achievements",
                         "additionalItems": false,
                         "items": {
                             "type": "string",
-                            "description": "e.g. Increased profits by 20% from 2011-2012 through viral advertising"
+                            "description": "e.g. organized branch activities and mentored"
                         }
-                    }
-                }
-            }
-        },
-        "certificates": {
-            "type": "array",
-            "description": "Specify any certificates you have received throughout your professional career",
-            "additionalItems": false,
-            "items": {
-                "type": "object",
-                "additionalProperties": true,
-                "properties": {
-                    "name": {
-                        "type": "string",
-                        "description": "e.g. Certified Kubernetes Administrator"
-                    },
-                    "date": {
-                        "$ref": "#/definitions/iso8601"
-                    },
-                    "url": {
-                        "type": "string",
-                        "description": "e.g. http://example.com",
-                        "format": "uri"
-                    },
-                    "issuer": {
-                        "type": "string",
-                        "description": "e.g. CNCF"
-                    }
-                }
-            }
-        },
-        "languages": {
-            "type": "array",
-            "description": "List any other languages you speak",
-            "additionalItems": false,
-            "items": {
-                "type": "object",
-                "additionalProperties": true,
-                "properties": {
-                    "language": {
-                        "type": "string",
-                        "description": "e.g. English, Spanish"
-                    },
-                    "fluency": {
-                        "type": "string",
-                        "description": "e.g. Fluent, Beginner"
-                    }
-                }
-            }
-        },
-        "references": {
-            "type": "array",
-            "description": "List references you have received",
-            "additionalItems": false,
-            "items": {
-                "type": "object",
-                "additionalProperties": true,
-                "properties": {
-                    "name": {
-                        "type": "string",
-                        "description": "e.g. Timothy Cook"
-                    },
-                    "reference": {
-                        "type": "string",
-                        "description": "e.g. Joe blogs was a great employee, who turned up to work at least once a week. He exceeded my expectations when it came to doing nothing."
                     }
                 }
             }
@@ -370,11 +242,29 @@ const schema: RJSFSchema = {
     "type": "object"
 }
 
-
 export default function Junior() {
+    const { userId } = auth();
+    if (userId === null) {
+        redirect('/')
+    }
+    const formData = readResume(userId)
+    // todo: add use effect from : https://nextjs.org/docs/pages/building-your-application/data-fetching/client-side
+    // example:  useEffect(() => {
+    //     fetch('/api/profile-data')
+    //     .then((res) => res.json())
+    //     .then((data) => {
+    //       setData(data)
+    //       setLoading(false)
+    //     })
+    // }, [])
     return (
         <div>
-            <Form schema={schema} validator={validator} onSubmit={({ formData }) => fetch('/api/resume', { method: 'POST', body: JSON.stringify(formData), headers: { 'content-type': 'application/json' } })} />
+            <Form schema={schema} formData={formData} validator={validator} onSubmit={({ formData }) => fetch('/api/resume', { method: 'POST', body: JSON.stringify(formData), headers: { 'content-type': 'application/json' } })} >
+                <div>
+                    <Button variant="contained">Update Resume</Button>
+
+                </div>
+            </Form>
         </div>
     )
 }

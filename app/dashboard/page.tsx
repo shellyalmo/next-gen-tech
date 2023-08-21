@@ -18,15 +18,15 @@ export default async function Dashboard() {
         <Link href="jobslist" underline="none">
           <Button variant="contained">go to all jobs</Button>
         </Link>
-        <Link href="register/junior" underline="none">
-          <Button variant="contained">Upload resume</Button>
+        <Link href="create/resume" underline="none">
+          <Button variant="contained">My resume</Button>
         </Link>
       </div>}
       {userType === "recruiter" && <div className="flex flex-row">
         <Link href="jobslist" underline="none">
           <Button variant="contained">go to all jobs</Button>
         </Link>
-        <Link href="register/recruiter" underline="none">
+        <Link href="create/job" underline="none">
           <Button variant="contained">Upload job</Button>
         </Link>
       </div>}

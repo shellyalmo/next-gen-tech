@@ -1,5 +1,5 @@
 import { sql } from "@vercel/postgres";
-import { IJobSchema } from "./interfaces";
+import { IJobSchema, IResumeSchema } from "./interfaces";
 
 export async function saveUserJunior(userId: string, userType: string) {
   await sql`INSERT INTO users (user_id,user_type)
@@ -53,4 +53,10 @@ export async function addApplicantToJob(userId: string, jobId: string) {
   SET applicants = ARRAY_APPEND(applicants, ${userId})
   WHERE job_id = ${jobId};  
   `;
+}
+
+export async function readResume(userId: string) {
+  return await sql<{
+    resume: IResumeSchema;
+  }>`SELECT resume from juniors where junior_id=${userId};`;
 }
