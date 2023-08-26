@@ -1,13 +1,11 @@
 'use client'
 
-import { readResume } from '@/app/api/db';
-import { auth } from '@clerk/nextjs';
 import { Button } from '@mui/material';
 import Form from '@rjsf/mui';
 import { RJSFSchema } from '@rjsf/utils';
 import validator from '@rjsf/validator-ajv8';
-import { redirect } from 'next/navigation';
-import { useEffect } from 'react';
+
+import { useEffect, useState } from 'react';
 
 const schema: RJSFSchema = {
 
@@ -242,21 +240,24 @@ const schema: RJSFSchema = {
     "type": "object"
 }
 
-export default function Junior() {
-    const { userId } = auth();
-    if (userId === null) {
-        redirect('/')
-    }
-    const formData = readResume(userId)
-    // todo: add use effect from : https://nextjs.org/docs/pages/building-your-application/data-fetching/client-side
-    // example:  useEffect(() => {
-    //     fetch('/api/profile-data')
-    //     .then((res) => res.json())
-    //     .then((data) => {
-    //       setData(data)
-    //       setLoading(false)
-    //     })
-    // }, [])
+export default function Resume() {
+
+    const [formData, setFormData] = useState(null);
+
+    useEffect(() => {
+
+        fetch('/api/resume', { method: 'GET' })
+            .then((data) => {
+                return data.json()
+            })
+            .then(data => {
+                setFormData(data.rows[0].resume)
+            })
+            .catch((error) => {
+                console.error('Error fetching resume:', error);
+            });
+    })
+
     return (
         <div>
             <Form schema={schema} formData={formData} validator={validator} onSubmit={({ formData }) => fetch('/api/resume', { method: 'POST', body: JSON.stringify(formData), headers: { 'content-type': 'application/json' } })} >
