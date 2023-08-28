@@ -9,7 +9,11 @@ export async function POST(request: Request) {
   const resume = await request.json();
 
   if (userId !== null) {
-    saveNewResume(userId, resume);
+    try {
+      await saveNewResume(userId, resume);
+    } catch (error) {
+      return NextResponse.json({ success: false });
+    }
     return NextResponse.json({ success: true });
   } else {
     return NextResponse.json({ success: false });

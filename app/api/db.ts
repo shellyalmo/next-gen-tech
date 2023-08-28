@@ -7,8 +7,8 @@ export async function saveUserJunior(userId: string, userType: string) {
 }
 
 export async function saveNewResume(userId: string, resume: any) {
-  await sql`INSERT INTO juniors (junior_id,resume)
-  VALUES(${userId},${resume});`;
+  await sql`INSERT INTO juniors (junior_id,resume) VALUES(${userId},${resume})
+  ON CONFLICT (junior_id) DO UPDATE SET resume=${resume}`;
 }
 // select resume->'work'->'0'->'name' from juniors;
 

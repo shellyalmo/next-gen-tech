@@ -245,7 +245,6 @@ export default function Resume() {
     const [formData, setFormData] = useState(null);
 
     useEffect(() => {
-
         fetch('/api/resume', { method: 'GET' })
             .then((data) => {
                 return data.json()
@@ -256,14 +255,13 @@ export default function Resume() {
             .catch((error) => {
                 console.error('Error fetching resume:', error);
             });
-    })
+    }, [])
 
     return (
         <div>
-            <Form schema={schema} formData={formData} validator={validator} onSubmit={({ formData }) => fetch('/api/resume', { method: 'POST', body: JSON.stringify(formData), headers: { 'content-type': 'application/json' } })} >
+            <Form schema={schema} formData={formData} validator={validator} onSubmit={({ formData }) => fetch('/api/resume', { method: 'POST', body: JSON.stringify(formData), headers: { 'content-type': 'application/json' } })} onChange={({ formData }) => { setFormData(formData) }}>
                 <div>
-                    <Button variant="contained">Update Resume</Button>
-
+                    <Button type='submit' variant="contained">Update Resume</Button>
                 </div>
             </Form>
         </div>
