@@ -3,6 +3,7 @@
 import Form from '@rjsf/mui';
 import { RJSFSchema } from '@rjsf/utils';
 import validator from '@rjsf/validator-ajv8';
+import { useState } from 'react';
 
 const schema: RJSFSchema = {
     "required": ["Job Info"],
@@ -66,16 +67,14 @@ const schema: RJSFSchema = {
     "type": "object"
 }
 
-export default function Job() {
+export default function JobForm({ jobFormData }: { jobFormData: any }) {
+    const [formData, setFormData] = useState(jobFormData);
+
     return (
         <div>
-            <Form schema={schema} validator={validator} onSubmit={({ formData }) => fetch('/api/job', { method: 'POST', body: JSON.stringify(formData), headers: { 'content-type': 'application/json' } })} />
+            <Form schema={schema} formData={formData} validator={validator} onSubmit={({ formData }) => fetch('/api/job', { method: 'POST', body: JSON.stringify(formData), headers: { 'content-type': 'application/json' } })} onChange={({ formData }) => { setFormData(formData) }} />
         </div>
     )
-
-
-
-
 
 }
 
