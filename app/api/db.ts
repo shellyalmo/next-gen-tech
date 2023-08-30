@@ -1,13 +1,14 @@
 import { sql } from "@vercel/postgres";
 import { IJobSchema, IResumeSchema } from "./interfaces";
+import { randomUUID } from "crypto";
 
 export async function saveUserJunior(userId: string, userType: string) {
   await sql`INSERT INTO users (user_id,user_type)
   VALUES(${userId},${userType});`;
 }
 
-export async function saveNewResume(userId: string, resume: any) {
-  await sql`INSERT INTO juniors (junior_id,resume) VALUES(${userId},${resume})
+export async function saveNewResume(juniorId: string, resume: any) {
+  await sql`INSERT INTO juniors (junior_id,resume) VALUES(${juniorId},${resume})
   ON CONFLICT (junior_id) DO UPDATE SET resume=${resume}`;
 }
 // select resume->'work'->'0'->'name' from juniors;
@@ -16,10 +17,19 @@ export async function saveUserRecruiter(userId: string, userType: string) {
   await sql`INSERT INTO users (user_id,user_type)
     VALUES(${userId},${userType});`;
 }
-export async function saveNewJob(userId: string, job: any) {
-  await sql`INSERT INTO jobs (recruiter_id,job)
-    VALUES(${userId},${job});`;
+export async function saveJob(
+  recruiterId: string,
+  job: object,
+  jobId: string | any
+) {
+  await sql`INSERT INTO jobs (recruiter_id,job,job_id)
+    VALUES(${recruiterId},${JSON.stringify(job)},${
+    typeof jobId === "string" ? jobId : randomUUID()
+  }) ON CONFLICT (job_id) DO UPDATE SET job=${JSON.stringify(job)};`;
 }
+
+
+
 // SELECT job->'skills'->0->>'name' FROM jobs;
 // SELECT job->'Job Info'->'title' FROM jobs;
 
@@ -60,3 +70,5 @@ export async function readResume(userId: string) {
     resume: IResumeSchema;
   }>`SELECT resume from juniors where junior_id=${userId};`;
 }
+
+
